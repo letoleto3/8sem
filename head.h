@@ -12,13 +12,16 @@
 #define LEN 1234
 
 #define eps 1e-8
-#define EPS 1e-16
+#define EPS 1e-14
 #define MAX_ITER 2000
 #define OMEGA 1
 #define COEF  M_PI
+#define INIT_X 30
+#define INIT_T 100
 
 #define LASPACK 1
 #define RELEASE 1
+#define SOKOLOV 0
 
 /// FOR GNUPLOT
 #define FILE_COMMAND "com.txt"
@@ -30,7 +33,7 @@ void print_to_file (const char * filename, double *X, double *Y, double * data, 
 void print_norm_to_file (FILE *fp, int n, int m, double *array);
 void print_norms_to_file (const char * filename, int n, int m,
                           double *ncg, double *ncv1, double *ncv2,
-                          double *nl2g, double *nl2v1, double *nl2v2, double *nwg, double *nwv1, double *nwv2);
+                          double *nl2g, double *nl2v1, double *nl2v2, double *nwg, double *nwv1, double *nwv2, double *time);
 
 /// NORMS
 void Norm_c (int it, int n,
@@ -99,3 +102,13 @@ double get_V_x (double x, double y, double h);
 double get_V_y (double x, double y, double h);
 void clean_png (const char *path);
 
+/// SOKOLOV
+void Setka_S (int *st, double *X, double *Y, int *bot, int *top, P_she *p_s);
+void Shema_S (double *G, int *st_H, double *X_H, double *Y_H, int *M0L_H, int *M0R_H,
+              double *V1, double *V2, int *st, double *X, double *Y, int *M0L, int *M0R,
+              P_she *p_s, P_gas *p_d);
+int is_zero (double a);
+void copy_answer_L_H (Vector *x, double *G, int n);
+void copy_answer_L_V (Vector *x, double *V1, double *V2, int n);
+void prepare_to_solve_system_L_H (Vector *d, double *G, int n);
+void prepare_to_solve_system_L_V (Vector *d, double *V1, double *V2, int n);

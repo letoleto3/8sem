@@ -57,13 +57,17 @@ int main(int argc, char *argv[])
   double *nc_g, *nl2_g, *nw_g;
   double *nc_v1, *nl2_v1, *nw_v1;
   double *nc_v2, *nl2_v2, *nw_v2;
+  double *tim;
 
   double *workspace_d;
   int *workspace_i;
   double *workspace_d_2;
+  double time;
 
   double *G, *V1, *V2, *X, *Y;
   int *st, *M0L, *M0R;
+  int *H_st, *H_M0L, *H_M0R;
+  double *H_X, *H_Y;
 
   P_gas p_d;
   P_she p_s;
@@ -75,8 +79,8 @@ int main(int argc, char *argv[])
 
   param_she_step (&p_s, &p_d, it_t_max, it_sp_max);
 
-  workspace_d = (double*)malloc(5 * p_s.Dim * sizeof(double));
-  workspace_i = (int*)malloc(3 * p_s.Dim * sizeof(int));
+  workspace_d = (double*)malloc(5 * p_s.Dim * sizeof(double) + 2 * p_s.S_DimH * sizeof (double));
+  workspace_i = (int*)malloc(3 * p_s.Dim * sizeof(int) + 3 * p_s.S_DimH * sizeof (int));
 
   if (!workspace_i || !workspace_d)
     return -1;
@@ -85,12 +89,17 @@ int main(int argc, char *argv[])
   V2 = V1 + p_s.Dim;
   X = V2 + p_s.Dim;
   Y = X + p_s.Dim;
+  H_X = Y + p_s.S_DimH;
+  H_Y = H_X + p_s.S_DimH;
 
   st = workspace_i;
   M0L = st + p_s.Dim;
   M0R = M0L + p_s.Dim;
+  H_st = M0R + p_s.S_DimH;
+  H_M0L = H_st + p_s.S_DimH;
+  H_M0R = H_M0L + p_s.S_DimH;
 
-  workspace_d_2 = (double*)malloc(9 * it_max * sizeof(double));
+  workspace_d_2 = (double*)malloc(10 * it_max * sizeof(double));
 
   nc_g = workspace_d_2;
   nl2_g = nc_g + it_max;
@@ -101,6 +110,7 @@ int main(int argc, char *argv[])
   nc_v2 = nw_v1 + it_max;
   nl2_v2 = nc_v2 + it_max;
   nw_v2 = nl2_v2 + it_max;
+  tim = nw_v2 + it_max;
 
   printf ("Started\n");
   for (it_t = 0; it_t < it_t_max; it_t++)
@@ -112,14 +122,25 @@ int main(int argc, char *argv[])
               clean_png ("G");
               clean_png ("V");
             }
+          else
+            {
+              time = clock ();
+            }
 
           printf ("time it = %d, sp it = %d \n", it_t, it_sp);
           param_she_step (&p_s, &p_d, it_t, it_sp);
-          printf ("Params system: hx = %f, hy = %f, tau = %f\n", p_s.h_x, p_s.h_y, p_s.tau);
-          printf ("fill maps\n");
-          Setka (st, X, Y, M0L, M0R, &p_s);
-          printf ("Computing...\n");
-          Shema (G, V1, V2, st, X, Y, M0L, M0R, &p_s, &p_d);
+
+          if (SOKOLOV)
+            {
+              Setka_S (H_st, H_X, H_Y, H_M0L, H_M0R, &p_s);
+              Setka (st, X, Y, M0L, M0R, &p_s);
+              Shema_S (G, H_st, H_X, H_Y, H_M0L, H_M0R, V1, V2, st, X, Y, M0L, M0R, &p_s, &p_d);
+            }
+          else
+            {
+              Setka (st, X, Y, M0L, M0R, &p_s);
+              Shema (G, V1, V2, st, X, Y, M0L, M0R, &p_s, &p_d);
+            }
 
           if (!RELEASE)
             {
@@ -129,6 +150,8 @@ int main(int argc, char *argv[])
               Norm_c (it, p_s.Dim, G, V1, V2, X, Y, 1, nc_g, nc_v1, nc_v2);
               Norm_l2 (it, p_s.Dim, G, V1, V2, X, Y, 1, nl2_g, nl2_v1, nl2_v2, p_s.h_x, st);
               Norm_Wl2 (it, p_s.Dim, G, V1, V2, X, Y, 1, nw_g, nw_v1, nw_v2, p_s.h_x, st, M0L);
+
+              tim[it] = (clock () - time) / CLOCKS_PER_SEC;
 
               printf ("\n Norms C: %e, %e, %e\n", nc_g[it], nc_v1[it], nc_v2[it]);
               printf ("Norms L2: %e, %e, %e\n", nl2_g[it], nl2_v1[it], nl2_v2[it]);
@@ -154,10 +177,10 @@ int main(int argc, char *argv[])
       print_to_file ("./V1.txt", X, Y, V1, p_s.Dim);
       print_to_file ("./V2.txt", X, Y, V2, p_s.Dim);
 
-      print_norms_to_file ("./norms.inc", it_t_max, it_sp_max,
+      print_norms_to_file ("./norms.tex", it_t_max, it_sp_max,
                            nc_g, nc_v1, nc_v2,
                            nl2_g, nl2_v1, nl2_v2,
-                           nw_g, nw_v1, nw_v2);
+                           nw_g, nw_v1, nw_v2, tim);
 
     }
   free (workspace_d);

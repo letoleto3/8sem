@@ -90,6 +90,8 @@ void Setka (int *st, double *X, double *Y, int *bot, int *top, P_she *p_s)
     }
 
   set_str (st, X, Y, bot, top, p_s,
-           &i, 7, 6, 7, 3 * n - 2,
+           &i, 7, 6, 2, 3 * n - 2,
            0, 3 * COEF, 3 * n - 2 , 3 * n - 2);
+
+  printf ("fill maps\n");
 }

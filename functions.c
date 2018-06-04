@@ -2,28 +2,34 @@
 
 void param_dif (P_gas * p_d)
 {
-  p_d->Segm_T = 1;
+  p_d->Segm_T = 50;
   p_d->Segm_X = COEF;
   p_d->Segm_Y = COEF;
   p_d->p_ro = 1;
-  p_d->mu = 0.1;
+  p_d->mu = 0.001;
 }
 
 void param_she_step (P_she *p_s, P_gas *p_d, int it_t, int it_sp)
 {
   int x, y;
-  int init_x = 10;
-  int init_y = 10;
-  int init_t = 20;
+  int init_x = INIT_X;
+  int init_y = INIT_X;
+  int init_t = INIT_T;
   x = p_s->M_x = init_x * (1 << (it_sp));
   y = p_s->M_y = init_y * (1 << (it_sp));
   p_s->N   = init_t * (1 << (it_t));
-  p_s->Dim = (2 * x - 1) *(3 * y - 2) + y * (x - 1);
   p_s->Dim = x * (3 * y - 2) + (2 * x - 2) * (2 * y - 1);
+
   p_s->h_x = p_d->Segm_X / (p_s->M_x - 1);
   p_s->h_y = p_d->Segm_Y / (p_s->M_y - 1);
-  p_s->tau = p_d->Segm_T / (p_s->N - 1);
+  p_s->tau = p_d->Segm_T / p_s->N;
   p_s->eta = 1;
+  p_s->gamma = 1.4;
+
+  if (SOKOLOV)
+    p_s->S_DimH = 7 *(x - 1) * (y - 1);
+  else
+    p_s->S_DimH = 0;
 
 
   p_s->nz = 3 * p_s->Dim + 1;
@@ -35,12 +41,14 @@ void param_she_step (P_she *p_s, P_gas *p_d, int it_t, int it_sp)
   p_s->nz += (4 + 1 + 1 - 3) * (x - 2);         // status 5
   p_s->nz += (4 + 1 + 1 - 3) * (3 * x - 2 - 2); // status 6
   p_s->nz += (9 + 7 + 7 - 3) * ((2 * x - 1 - 2) * (3 * y - 2 - 2) + (x - 1) * (y - 2)); // status 0
+
+  printf ("Params system: hx = %f, hy = %f, tau = %f\n", p_s->h_x, p_s->h_y, p_s->tau);
 }
 
 double inv_g (double t)
 {
   (void) t;
-  return 2;
+  return 1;
 }
 double inv_v1 (double t)
 {
@@ -61,6 +69,7 @@ double sm_vx (double t, double x, double y)
 {
   if (RELEASE)
     {
+      return 0;
       if (y > 2 * M_PI)
         return 0.1;
       return 0;
@@ -72,6 +81,7 @@ double sm_vy (double t, double x, double y)
 {
   if (RELEASE)
     {
+      return 0;
       if (x < M_PI)
         return 0;
       return -0.1;

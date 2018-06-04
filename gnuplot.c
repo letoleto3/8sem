@@ -42,7 +42,7 @@ void fill_command_file (const char *val_name, P_she *p_s, int time_step,
 }
 void print_paint_pm3d_command (char *path, const char *fname)
 {
-  const char *palette = "set palette defined (0 'khaki1', 1 'dark-violet')";
+  const char *palette = "set palette defined (0 'khaki', 1 'dark-violet')";
   const char *map = "set pm3d map";
   sprintf (path, "%s; %s; splot '%s' with pm3d%c",
            palette, map, fname, '\0');
@@ -62,7 +62,7 @@ void print_G_to_file (P_she *p_s, double *X, double *Y, int n, double *G, FILE *
   int top = 3 * M;
   for (i = 0; i < top; i++, x += h)
     {
-      for (j = 0; j < n; j++)
+      for (j = n - 1; j > -1; j--)
         {
           if (fabs (x - X[j]) > 1e-12)
             continue;
@@ -82,7 +82,7 @@ void print_V_to_file (P_she *p_s, double *X, double *Y, int n, double *V1, doubl
   int top = 3 * M;
   for (i = 0; i < top; i++, x += h)
     {
-      for (j = 0; j < n; j++)
+      for (j = n - 1; j > -1; j--)
         {
           if (fabs (x - X[j]) > 1e-12)
             continue;
