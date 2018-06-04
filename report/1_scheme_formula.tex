@@ -1,0 +1,78 @@
+\section{Схема для $\log(\rho)$ с центральными разностями}
+\label{scheme1}
+
+Для автоматического обеспечения условия положительности функции плотности систему дифференциальных уравнений можно преобразовать к виду
+\begin{equation}
+\left\{
+\begin{aligned}
+& \cfrac{\partial g}{\partial t} + \frac{1}{2}\sum_{k=1}^{2}\left(u_k\cfrac{\partial g}{\partial x_k}+
+  \cfrac{\partial u_k g}{\partial x_k} + (2-g)\cfrac{\partial u_k}{\partial x_k}\right) = f_0,\\
+& \cfrac{\partial u_k}{\partial t} + \frac{1}{3}(u_k\cfrac{\partial u_k}{\partial x_k} + 
+  \cfrac{\partial u_k^2}{\partial x_k})
+  + \frac{1}{2}\sum_{m=1,m\neq k}^{2}\left( u_m\cfrac{\partial u_k}{\partial x_m}+
+  \cfrac{\partial u_m u_k}{\partial x_m} - u_k\cfrac{\partial u_m}{\partial x_m}\right)
+  + p'_{\rho} \cfrac{\partial g}{\partial x_k} = \\
+& \qquad\qquad = \cfrac{\mu}{\rho}\left( \frac{4}{3} \cfrac{\partial^2 u_k}{\partial x_k^2} + 
+  \sum_{m=1,m\neq k}^{2}\left( \cfrac{\partial^2 u_k}{\partial x_m^2} + 
+  \frac{1}{3} \cfrac{\partial^2 u_m}{\partial x_k \partial x_m} \right)\right) + f_k,\qquad k = 1 \dots s,\\
+& p = p(\rho), \quad g = \ln \rho.
+\end{aligned}
+\right.
+\end{equation}
+
+Сеточную функцию, разностное приближение для плотности $\rho$, обозначим $H$. 
+Аналогично, разностные аналоги $g$ и $u$ обозначим через $G$ и $V$. 
+Для поиска численного решения задачи используется следующая разностная схема:
+$$\begin{eqnarray}
+&\,& G_t + \frac{1}{2} \sum_{k=1}^{2}\left(V_k \hat G_{\stackrel{\circ}{x_k}} + (V_k \hat G)_{\stackrel{\circ}{x_k}} 
+  + 2 (\hat V_k)_{\stackrel{\circ}{x_k}} - G(V_k)_{\stackrel{\circ}{x_k}} \right) = f_0,\qquad x \in \Omega _{\bar h};\\
+&\,& G_t + \frac{1}{2} \left((V_k \hat G)_{x_k} + 2 (\hat V_k)_{x_k} - G(V_k)_{x_k}\right) -\frac{1}{2}h_k \left( (GV_k)_{x_k\bar x_k}^{+1_k} - \frac{1}{2}(GV_k)_{x_k\bar x_k}^{+2_k} + \right. \nonumber \\
+&\,& \qquad\left.  + (2-G)\left((V_k)_{x_k\bar x_k}^{+1_k} - \frac{1}{2} (V_k)_{x_k\bar x_k}^{+2_k}\right)\right) = f_0, \qquad x \in \gamma_k^-,\,\, k = 1,\ 2;\\
+&\,& G_t + \frac{1}{2} \left((V_k \hat G)_{\bar x_k} + 2 (\hat V_k)_{\bar x_k} - G(V_k)_{\bar x_k}\right)+ \frac{1}{2}h_k \left( (GV_k)_{x_k\bar x_k}^{-1_k} - \frac{1}{2}(GV_k)_{x_k\bar x_k}^{-2_k} +\right. \nonumber\\
+&\,&\qquad \left. + (2-G)\left((V_k)_{x_k\bar x_k}^{-1_k} - \frac{1}{2} (V_k)_{x_k\bar x_k}^{-2_k}\right)\right)  = f_0, \qquad x \in \gamma_k^+,\,\, k = 1,\ 2; \\
+&\,& (V_k)_t + \frac{1}{3}\left( V_k(\hat V_k)_{\stackrel{\circ}{x_k}} + (V_k \hat V_k)_{\stackrel{\circ}{x_k}} \right) + \nonumber\\
+&\,& \quad + \frac{1}{2}\sum_{m=1,\,m\neq k}^{2}\left(V_m(\hat V_k)_{\stackrel{\circ}{x_m}} + (V_m \hat V_k)_{\stackrel{\circ}{x_m}} - V_k(\hat V_m)_{\stackrel{\circ}{x_m}} \right) + p'_{\rho }(e^{G})\hat G_{\stackrel{\circ}{x_m}} = \nonumber\\
+&\,& \qquad = \tilde{\mu} \left( \frac{4}{3}(\hat V_k)_{x_k\bar x_k} + \sum_{m=1,\,m\neq k}^{2}(\hat V_k)_{x_m\bar x_m} \right)- \left(\tilde{\mu} - \mu e^{-G}\right) \times \nonumber\\
+&\,&\qquad \quad \times \left( \frac{4}{3}(V_k)_{x_k\bar x_k} + \sum_{m=1,\,m\neq k}^{2}(V_k)_{x_m\bar x_m} \right) + \cfrac{\mu e^{-G}}{3} \sum_{m=1,\,m\neq k}^{2}(V_m)_{\stackrel{\circ}{x_k} \stackrel{\circ}{x_m}} + f_k,\nonumber\\
+&\,&\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\mbox{где } x\in \Omega_{\bar h};\\
+&\,& \hat V_k = 0, \qquad x \in \gamma_{\bar h}, \qquad k = 1,\ 2.
+\end{eqnarray}$$
+
+Распишем уравнения схемы в поточечном виде и преобразуем их, приведя подобные слагаемые при неизвестных значениях с верхнего слоя. Получим:
+
+\begin{align*}
+& 4\cdot G_{m_1,m_2}^{n+1} -\frac{\tau}{h_x} G_{m_1-1,m_2}^{n+1}\left({V_1}_{m_1,m_2}^n + {V_1}_{m_1-1,m_2}^n\right) + \frac{\tau}{h_x} G_{m_1+1,m_2}^{n+1}\left({V_1}_{m_1,m_2}^n + {V_1}_{m_1+1,m_2}^n\right) -\\
+& \quad -\frac{\tau}{h_y} G_{m_1,m_2-1}^{n+1}\left({V_2}_{m_1,m_2}^n + {V_2}_{m_1,m_2-1}^n\right) + \frac{\tau}{h_y} G_{m_1,m_2+1}^{n+1}\left({V_2}_{m_1,m_2}^n + {V_2}_{m_1,m_2+1}^n\right) -\\
+& \qquad-\frac{2\tau}{h_x} {V_1}_{m_1-1,m_2}^{n+1} + \frac{2\tau}{h_x} {V_1}_{m_1+1,m_2}^{n+1} -\frac{2\tau}{h_y} {V_2}_{m_1,m_2-1}^{n+1} + \frac{2\tau}{h_y} {V_2}_{m_1,m_2+1}^{n+1} = \\
+& \qquad\quad =\ 4\cdot G_{m_1,m_2}^n + \tau G_{m_1,m_2}^n 
+\left(\cfrac{{V_1}_{m_1+1,m_2}^n - {V_1}_{m_1-1,m_2}^n}{h_x} +  \cfrac{{V_2}_{m_1,m_2+1}^n - {V_2}_{m_1,m_2-1}^n}{h_y}\right) +\ 4\tau f_0, \\
+& \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\mbox{где } x\in \Omega _h \\
+\end{align*}
+\begin{align*}
+& G_{0,m_2}^{n+1}\left(2 - \frac{\tau}{h_x}{V_1}_{0,m_2}^n\right) + G_{1,m_2}^{n+1}\frac{\tau}{h_x}{V_1}_{1,m_2}^n + \frac{2\tau}{h_x}{V_1}_{1,m_2}^{n+1} - \frac{2\tau}{h_x}{V_1}_{0,m_2}^{n+1} =  \\
+&\quad =  2 \cdot G_{0,m_2}^n + \frac{\tau}{h_x} G_{0,m_2}^n \left({V_1}_{1,m_2}^n - {V_1}_{0,m_2}^n\right) + 2\tau f_0 +\\
+& \qquad + \frac{\tau}{h_x} \left( G_{0,m_2}^n {V_1}_{0,m_2}^n - \frac{5}{2}\cdot G_{1,m_2}^n {V_1}_{1,m_2}^n + 2\cdot G_{2,m_2}^n {V_1}_{2,m_2}^n -\right.\\
+& \left. \qquad\quad - \frac{1}{2}\cdot G_{3,m_2}^n {V_1}_{3,m_2}^n + \left(2 - G_{0,m_2}^n\right) \cdot \left({V_1}_{0,m_2}^n - 2.5\cdot {V_1}_{1,m_2}^n + 2 {V_1}_{2,m_2}^n - 0.5 {V_1}_{3,m_2}^n\right) \right), \\
+& \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\mbox{где } x \in \gamma_k^-
+\end{align*}
+\begin{align*}
+& G_{M,m_2}^{n+1}\left(2 + \frac{\tau}{h_x}{V_1}_{M,m_2}^n\right) - G_{M-1,m_2}^{n+1}\frac{\tau}{h_x}{V_1}_{M-1,m_2}^n + \frac{2\tau}{h_x}{V_1}_{M,m_2}^{n+1} - \frac{2\tau}{h_x}{V_1}_{M-1,m_2}^{n+1} = \\
+& \quad=  2\cdot G_{M,m_2}^n + \frac{\tau}{h_x} G_{M,m_2}^n \left({V_1}_{M,m_2}^n - {V_1}_{M-1,m_2}^n\right) + 2\tau f_0 - \frac{\tau}{h_x} \times \Bigg[ G_{M,m_2}^n {V_1}_{M,m_2}^n - \\
+&\qquad- \frac{5}{2}\cdot G_{M-1,m_2}^n {V_1}_{M-1,m_2}^n + 2 \cdot G_{M-2,m_2}^n {V_1}_{M-2,m_2}^n - \frac{1}{2}\cdot G_{M-3,m_2}^n {V_1}_{M-3,m_2}^n +\\
+&\qquad\quad +\left(2 - G_{M,m_2}^n\right) \cdot \left({V_1}_{M,m_2}^n - \frac{5}{2}\cdot {V_1}_{M-1,m_2}^n + 2 \cdot{V_1}_{M-2,m_2}^n - \frac{1}{2}\cdot  {V_1}_{M-3,m_2}^n\right) \Bigg],\\
+& \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\mbox{где } x \in \gamma_k^+
+\end{align*}
+\begin{align*}
+& {V_1}_{m_1,m_2}^{n+1}\left(6 + 4\cdot \tau \tilde{\mu}\left(\cfrac{4}{h_x^2} + \cfrac{3}{h_y^2}\right)\right) + {V_1}_{m_1-1,m_2}^{n+1}\left(-\frac{\tau}{h_x}\left({V_1}_{m_1,m_2}^n + {V_1}_{m_1-1,m_2}^n\right) -\tilde{\mu}\cfrac{8\tau}{h_x^2}\right) +\\
+& \quad + {V_1}_{m_1+1,m_2}^{n+1}\left(\frac{\tau}{h_x}\left({V_1}_{m_1,m_2}^n + {V_1}_{m_1+1,m_2}^n\right) -\cfrac{8\tau}{h_x^2}\right) \cdot \tilde{\mu} +\\
+& \quad \quad + {V_1}_{m_1,m_2-1}^{n+1}\left(-\frac{3\tau}{2h_y}\left({V_2}_{m_1,m_2}^n + {V_2}_{m_1,m_2-1}^n\right) - \cfrac{6\tau}{h_y^2}\right)\cdot \tilde{\mu}  +\\
+& \quad\qquad + {V_1}_{m_1,m_2+1}^{n+1}\left(\frac{3\tau}{2h_y}\left({V_2}_{m_1,m_2}^n + {V_2}_{m_1,m_2+1}^n\right) - \cfrac{6\tau}{h_y^2}\right)\cdot \tilde{\mu}  -\\
+& \qquad\qquad- 3\cdot \frac{\tau}{h_x}\cdot p'_{\rho} G_{m_1-1,m_2}^{n+1} + 3\cdot \frac{\tau}{h_x} \cdot p'_{\rho} G_{m_1+1,m_2}^{n+1} = \\
+& =  6 \cdot {V_1}_{m_1,m_2}^n + 6 \cdot \tau f_1 + \frac{3}{2}\cdot \frac{\tau}{2h_y}{V_1}_{m_1,m_2}^n \left({V_2}_{m_1,m_2+1}-{V_2}_{m_1,m_2-1}\right) - \\
+& \quad - 6\cdot \tau \cdot \left(\tilde{\mu} - \mu e^{-G}\right) \cdot 
+  \left(\cfrac{4}{3h_x^2}\left({V_1}_{m_1+1,m_2}^n - 2{V_1}_{m_1,m_2}^n + {V_1}_{m_1-1,m_2}^n\right) \right. \\
+&\qquad \left.+  \cfrac{1}{h_y^2}\left({V_1}_{m_1,m_2+1}^n - 2{V_1}_{m_1,m_2}^n + {V_1}_{m_1,m_2-1}^n\right)\right) +\\
+& \qquad\quad + \mu e^{-G} \cfrac{\tau}{2h_x h_y}
+  \left({V_2}_{m_1+1,m_2+1}^n - {V_2}_{m_1-1,m_2+1}^n - {V_2}_{m_1+1,m_2-1}^n + {V_2}_{m_1-1,m_2-1}^n\right), \\
+& \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\mbox{где } \tilde{\mu} = \mu \|e^{-G}\|.
+\end{align*}

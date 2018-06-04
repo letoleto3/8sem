@@ -1,0 +1,83 @@
+\documentclass[12pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{vmargin}
+\usepackage{indentfirst}
+\usepackage[T2A]{fontenc}
+\usepackage{graphics}
+\usepackage{amsthm}
+\usepackage{amsbsy}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtext}
+\usepackage[pdftex,a4paper,colorlinks,linkcolor=blue,citecolor=blue]{hyperref}	
+
+\usepackage{mathtext}
+\usepackage{mathenv}
+\usepackage[pdftex]{graphicx}
+\usepackage{array}
+\usepackage{graphicx,xcolor}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{longtable}
+
+%\parindent = 30pt
+%\hoffset = 0pt
+%\voffset = 0pt
+\oddsidemargin = 100pt
+\topmargin = 18pt
+%\headheight = 12pt
+%\headsep = 25pt
+\textheight = 700pt
+\textwidth = 440pt
+%\marginparsep = 10pt
+%\marginparwidth = 103pt
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\paperwidth = 597pt
+\paperheight = 845pt
+\numberwithin{equation}{section}
+
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\const}{const}
+\renewcommand{\Re}{\mathop{\mathrm{Re}}\nolimits}
+\renewcommand{\Im}{\mathop{\mathrm{Im}}\nolimits}
+\newtheorem{algorithm}{Алгоритм}[section]
+
+\begin{document}
+
+\begin{titlepage} \newpage 
+\begin{center} МОСКОВСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ ИМ. М.В. ЛОМОНОСОВА\end{center} 
+\vspace{8em} \begin{center} 
+\Large Механико-математический факультет \\ \end{center}
+\vspace{2em} \begin{center} 
+\textsc{Отчет по практикуму на ЭВМ \linebreak 
+\textbf{Численное моделирование нестационарного одномерного течения газа: \linebreak
+Схема для $\log (\rho)$ с центральными разностями}} \end{center}
+\vspace{6em} \newbox{\lbox} \savebox{\lbox}{\hbox{Я.Нагорных}} 
+\newlength{\maxl} \setlength{\maxl}{\wd\lbox} \hfill\parbox{12	cm}
+{ \hspace*{10cm}\hspace*{-5cm}Студент 4 курса:\hfill\hbox to\maxl{Нагорных Я.В.}\\
+\hspace*{10cm}\hspace*{-5cm}Преподаватель:\hfill\hbox to\maxl{Попов А.В.}}\\  \vspace{\fill}
+\begin{center} Москва \\ 2018\end{center} \end{titlepage}
+
+%\maketitle
+
+%\renewcommand{\contentsname}{Содержание}
+\tableofcontents
+\renewcommand{\figurename}{График}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+
+\newpage
+
+\include{./problem}
+\include{./1_scheme_formula}
+%\include{./2_scheme_formula}
+%\include{./tests}
+%\include{./1_scheme_results}
+%\include{./2_scheme_results}
+
+\end {document}

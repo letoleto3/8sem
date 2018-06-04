@@ -1,0 +1,35 @@
+
+\section{Постановка задачи} \label{sec:1-postanovka-zadachi}
+Приведем систему уравнений, описывающую нестационарное двумерное движение вязкого баротропного газа:
+\begin{equation}
+\left\{
+	\begin{aligned}
+    	&\cfrac{\partial \rho}{\partial t} + \cfrac{\partial \rho u_1}{\partial x_1}+ \cfrac{\partial \rho u_2}{\partial x_2} = 0, \\
+	    & 
+\cfrac{\partial \rho u_1}{\partial t} + \cfrac{\partial \rho u_1^2}{\partial x_1} + \cfrac{\partial \rho u_1 u_2}{\partial x_2} 
+	+ \cfrac{\partial p}{\partial x_1} 
+	= \mu \Big(\cfrac{4}{3}\cfrac{\partial^2 u_1}{\partial x_1^2} + \cfrac{\partial^2 u_1}{\partial x_2^2}
+	+  \cfrac{1}{3}\cfrac{\partial^2 u_2}{\partial x_1\partial x_2} \Big) + \rho f_1, \\
+		&
+\cfrac{\partial \rho u_2}{\partial t} + \cfrac{\partial \rho u_1 u_2}{\partial x_1} + \cfrac{\partial \rho u_2^2}{\partial x_2}
+	+ \cfrac{\partial p}{\partial x_2} 
+	= \mu \Big(\cfrac{1}{3}\cfrac{\partial^2 u_1}{\partial x_1\partial x_2} + \cfrac{\partial^2 u_2}{\partial x_1^2}
+	+  \cfrac{4}{3}\cfrac{\partial^2 u_2}{\partial^2 x_2} \Big) + \rho f_2, \\
+    	& p = p (\rho).
+	\end{aligned}
+\right.
+\label{eq:1-nachal-zadacha}
+\end{equation}
+Здесь $\mu$ -- коэффициент вязкости газа (известная неотрицательная константа), $p$ -- давление газа (известная функция), $f$ -- вектор внешних сил (известная функция).
+
+Неизвестные функции $\rho$ и $u$, плотность и скорость соответственно, -- функции от двух переменных $t$ и $x$ (переменные Эйлера), причем $$(t, x) \in Q = [0, T] \times \Omega.$$
+
+В качестве граничных условий берется следующее:
+\begin{equation}
+\rho|_{\Gamma^-} = \rho_{\gamma} = 1,\quad u_1|_{\Gamma^-} = \omega \in \{0,1;\  1\},\quad \cfrac{\partial u_1}{\partial x_1}\Big|_{\Gamma^+} = 0. \label{eq:1-usl2}
+\end{equation}
+
+На оставшейся границе компоненты скорости равны нулю, а функция плотности считается неизвестной.
+
+Для решения задачи введем равномерную сетку $\omega_h$ с шагом $h_x$ по оси $x$, с шагом $h_y$ по оси $y$ и с шагом $\tau$ по оси $t$. 
+Введем константы $M_x$, $M_y$ и $N$, такие что $X = Mh$, $Y= My$ и $T = N\tau$.
